@@ -266,7 +266,6 @@ BEGIN {
     my $linter = OpenAPI::Linter->new(spec => $spec);
 
     # Lint checks for best practices
-    $linter->lint;
     my @lint_issues = $linter->find_issues(level => 'WARN');
     ok(scalar(@lint_issues) > 0, 'Lint finds warnings');
 

@@ -13,20 +13,25 @@ sub new {
     my ($class, %args) = @_;
 
     my $spec;
-    if ($args{file}) {
-        my $file = $args{file};
-        if ($file =~ /\.ya?ml$/i) {
-            $spec = LoadFile($file);
-        }
-        else {
-            $spec = decode_json(read_file($file));
+
+    if (ref $args{spec} eq 'HASH') {
+        # Already a hashref — use directly
+        $spec = $args{spec};
+    }
+    elsif ($args{spec}) {
+        # Spec is a file path
+        my $path = $args{spec};
+        if ($path =~ /\.ya?ml$/i) {
+            $spec = LoadFile($path);
+        } else {
+            $spec = decode_json(read_file($path));
         }
     }
     else {
-        $spec = $args{spec} or die "spec => HASHREF required if no file";
+        die "spec => HASHREF required if no file provided";
     }
 
-    my $version = $args{version} || '3.0.3';
+    my $version = $args{version} || $spec->{openapi} || '3.0.3';
 
     return bless {
         spec    => $spec,
@@ -35,8 +40,8 @@ sub new {
     }, $class;
 }
 
-sub lint {
-    my ($self) = @_;
+sub find_issues {
+    my ($self, %opts) = @_;
 
     my $spec = $self->{spec} || {};
     my @issues;
@@ -103,20 +108,12 @@ sub lint {
         }
     }
 
-    $self->{issues} = \@issues;
-
-    return $self;
-}
-
-sub find_issues {
-    my ($self, %opts) = @_;
-
     my $pattern = $opts{pattern};
     my $level   = $opts{level};
     my @result  = grep {
         (!defined($level)   || $_->{level}   eq $level)     &&
         (!defined($pattern) || $_->{message} =~ /$pattern/)
-    } @{ $self->{issues} };
+    } @issues;
 
     return wantarray ? @result : \@result;
 }
@@ -136,20 +133,34 @@ sub validate_schema {
         '3.1.1' => 'https://spec.openapis.org/oas/3.1/schema/2022-10-07',
     );
 
-    my $version    = $self->{version};
-    my $schema_url = $schema_urls{$version};
+    my $version = $self->{version} || $self->{spec}->{openapi} || '';
+    $version =~ s/^\s+|\s+$//g;
 
+    if ($version =~ /^3$/) {
+        $version = '3.0.0';
+    }
+    elsif ($version =~ /^3\.(\d)$/) {
+        $version .= '.0';
+    }
+
+    $self->{version} = $version;
+
+    my $schema_url = $schema_urls{$version};
     unless ($schema_url) {
         if ($version =~ /^3\.1/) {
             $schema_url = 'https://spec.openapis.org/oas/3.1/schema/2022-10-07';
-        } elsif ($version =~ /^3\.0/) {
+        }
+        elsif ($version =~ /^3\.0/) {
             $schema_url = 'https://spec.openapis.org/oas/3.0/schema/2021-09-28';
-        } else {
+        }
+        else {
             die "Unsupported OpenAPI version: $version";
         }
     }
 
-    return $validator->schema($schema_url)->validate($self->{spec});
+    my @errors = $validator->schema($schema_url)->validate($self->{spec});
+
+    return wantarray ? @errors : \@errors;
 }
 
 1;

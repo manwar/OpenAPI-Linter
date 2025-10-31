@@ -18,7 +18,7 @@ paths: {}
 YAML
     close $fh;
 
-    my $linter = eval { OpenAPI::Linter->new(file => $filename) };
+    my $linter = eval { OpenAPI::Linter->new(spec => $filename) };
     ok($linter, 'Loads YAML file successfully');
     isa_ok($linter, 'OpenAPI::Linter');
 }
@@ -38,7 +38,7 @@ YAML
 JSON
     close $fh;
 
-    my $linter = eval { OpenAPI::Linter->new(file => $filename) };
+    my $linter = eval { OpenAPI::Linter->new(spec => $filename) };
     ok($linter, 'Loads JSON file successfully');
     isa_ok($linter, 'OpenAPI::Linter');
 }

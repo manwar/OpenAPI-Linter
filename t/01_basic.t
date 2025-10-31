@@ -32,7 +32,7 @@ use OpenAPI::Linter;
 
 # Test 3: Constructor dies without spec or file
 {
-    eval { OpenAPI::Linter->new() };
+    eval { OpenAPI::Linter->new };
     like($@, qr/spec => HASHREF required/, 'Dies without spec or file');
 }
 

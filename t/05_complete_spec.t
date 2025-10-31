@@ -56,7 +56,6 @@ my $complete_spec = {
 };
 
 my $linter = OpenAPI::Linter->new(spec => $complete_spec);
-$linter->lint;
 
 my @all_issues = $linter->find_issues();
 is(scalar(@all_issues), 0, 'Complete spec has no issues');

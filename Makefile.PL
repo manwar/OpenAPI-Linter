@@ -4,8 +4,8 @@ WriteMakefile(
     NAME         => 'OpenAPI::Linter',
     VERSION_FROM => 'lib/OpenAPI/Linter.pm',
     ABSTRACT     => 'Lint and validate OpenAPI specification files',
-    AUTHOR       => 'Your Name <you@example.com>',
-    LICENSE      => 'perl',
+    AUTHOR       => 'Mohammad Sajid Anwar <mohammad.anwar@yahoo.com>',
+    LICENSE      => 'artistic_2',
     EXE_FILES    => ['script/openapi-lint'],
     PREREQ_PM    => {
         'JSON::Validator' => 0,
@@ -13,5 +13,19 @@ WriteMakefile(
         'JSON'            => 0,
         'File::Slurp'     => 0,
     },
+    dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
+    test  => { TESTS => 't/*.t' },
+    clean => { FILES => 'OpenAPI-Linter-*' },
+    (eval { ExtUtils::MakeMaker->VERSION(6.46) } ? (META_MERGE => {
+        'meta-spec' => { version => 2 },
+        provides    => {
+            'OpenAPI::Linter' => {
+                file    => 'lib/OpenAPI/Linter.pm',
+                version => '0.01'
+            },
+        },
+        })
+     : ()
+    )
 );
 

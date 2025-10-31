@@ -19,7 +19,6 @@ my $spec = {
 };
 
 my $linter = OpenAPI::Linter->new(spec => $spec);
-$linter->lint;
 
 # Test: Find by level
 {

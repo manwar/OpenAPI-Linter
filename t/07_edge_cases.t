@@ -14,7 +14,7 @@ use OpenAPI::Linter;
     };
 
     my $linter = OpenAPI::Linter->new(spec => $spec);
-    eval { $linter->lint };
+    eval { $linter->find_issues };
     ok(!$@, 'Handles empty paths object without error');
 }
 
@@ -28,7 +28,7 @@ use OpenAPI::Linter;
     };
 
     my $linter = OpenAPI::Linter->new(spec => $spec);
-    eval { $linter->lint };
+    eval { $linter->find_issues };
     ok(!$@, 'Handles empty components object without error');
 }
 
@@ -48,7 +48,7 @@ use OpenAPI::Linter;
     };
 
     my $linter = OpenAPI::Linter->new(spec => $spec);
-    eval { $linter->lint };
+    eval { $linter->find_issues };
     ok(!$@, 'Handles schema without properties');
 }
 
@@ -61,10 +61,7 @@ use OpenAPI::Linter;
     };
 
     my $linter = OpenAPI::Linter->new(spec => $spec);
-    $linter->lint;
     my @issues1 = $linter->find_issues();
-
-    $linter->lint;
     my @issues2 = $linter->find_issues();
 
     is(scalar(@issues1), scalar(@issues2),

@@ -17,7 +17,6 @@ use OpenAPI::Linter;
     };
 
     my $linter = OpenAPI::Linter->new(spec => $spec);
-    $linter->lint;
 
     my @warnings = $linter->find_issues(level => 'WARN');
 
@@ -50,7 +49,6 @@ use OpenAPI::Linter;
     };
 
     my $linter = OpenAPI::Linter->new(spec => $spec);
-    $linter->lint;
 
     my @warnings = $linter->find_issues(level => 'WARN');
 
@@ -88,7 +86,6 @@ use OpenAPI::Linter;
     };
 
     my $linter = OpenAPI::Linter->new(spec => $spec);
-    $linter->lint;
 
     my @warnings = $linter->find_issues(level => 'WARN');
 
@@ -121,7 +118,6 @@ use OpenAPI::Linter;
     };
 
     my $linter = OpenAPI::Linter->new(spec => $spec);
-    $linter->lint;
 
     my @warnings = $linter->find_issues(level => 'WARN');
 

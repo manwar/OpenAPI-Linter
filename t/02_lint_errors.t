@@ -9,7 +9,6 @@ use OpenAPI::Linter;
 {
     my $spec = {};
     my $linter = OpenAPI::Linter->new(spec => $spec);
-    $linter->lint;
 
     my @errors = $linter->find_issues(level => 'ERROR');
 
@@ -32,7 +31,6 @@ use OpenAPI::Linter;
     };
 
     my $linter = OpenAPI::Linter->new(spec => $spec);
-    $linter->lint;
 
     my @errors = $linter->find_issues(level => 'ERROR');
 
