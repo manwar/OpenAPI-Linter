@@ -1,0 +1,53 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use Getopt::Long;
+use JSON;
+use OpenAPI::Linter;
+
+# --- Parse command-line options ---
+my $json_output = 0;
+my $version;
+my $file;
+
+GetOptions(
+    'json'      => \$json_output,
+    'version=s' => \$version,
+    'file=s'    => \$file,
+) or die "Usage: $0 --file <specfile> [--json] [--version VERSION]\n";
+
+die "Usage: $0 --file <specfile> [--json] [--version VERSION]\n" unless $file;
+
+my $linter = OpenAPI::Linter->new(
+    file    => $file,
+    version => $version,
+);
+
+# --- Run linting ---
+my @issues = $linter->lint->find_issues;
+
+# --- Compute summary ---
+my ($errors, $warns) = (0,0);
+$errors++ for grep { $_->{level} eq 'ERROR' } @issues;
+$warns++  for grep { $_->{level} eq 'WARN' }  @issues;
+
+# --- Output ---
+if ($json_output) {
+    print JSON->new->pretty->encode({
+        summary => { errors => $errors, warnings => $warns },
+        issues  => \@issues,
+    });
+} else {
+    if (@issues) {
+        for my $i (@issues) {
+            printf "[%s] %s\n", $i->{level}, $i->{message};
+        }
+        printf "\nSummary: %d ERROR%s, %d WARN%s\n",
+               $errors, $errors==1?'':'s', $warns, $warns==1?'':'s';
+        exit 1;
+    } else {
+        print "No issues found.\n";
+        exit 0;
+    }
+}
+
