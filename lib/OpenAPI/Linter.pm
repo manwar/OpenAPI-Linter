@@ -1,6 +1,6 @@
 package OpenAPI::Linter;
 
-$OpenAPI::Linter::VERSION   = '0.02';
+$OpenAPI::Linter::VERSION   = '0.03';
 $OpenAPI::Linter::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ OpenAPI::Linter - Validate and lint OpenAPI specifications
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =head1 SYNOPSIS
 

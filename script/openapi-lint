@@ -37,7 +37,7 @@ if ($validate_schema) {
     print "Running schema validation for $spec...\n" unless $json_output;
     @issues = $linter->validate_schema;
 } else {
-    @issues = $linter->lint->find_issues;
+    @issues = $linter->find_issues;
 }
 
 my ($errors, $warns) = (0, 0);

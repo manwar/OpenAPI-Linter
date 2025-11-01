@@ -1,5 +1,8 @@
 Revision history for OpenAPI::Linter
 
+0.03  2025-11-01
+      - Fixed script: openapi-linter
+
 0.02  2025-11-01
       - Updated pod documentation.
 
