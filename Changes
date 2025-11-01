@@ -1,7 +1,11 @@
 Revision history for OpenAPI::Linter
 
+0.04  2025-11-01
+      - Added checks for spec file.
+      - Updated pod.
+
 0.03  2025-11-01
-      - Fixed script: openapi-linter
+      - Fixed script: openapi-lint.
 
 0.02  2025-11-01
       - Updated pod documentation.

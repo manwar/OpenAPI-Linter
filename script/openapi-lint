@@ -27,6 +27,8 @@ if (not $spec) {
     print_usage(2);
 }
 
+die "ERROR: Spec file not found: $spec\n" unless (-f $spec);
+
 my $linter = OpenAPI::Linter->new(
     spec    => $spec,
     version => $version,
@@ -72,7 +74,7 @@ sub print_usage {
     my ($exit_code) = @_;
     print <<'USAGE';
 Usage:
-  openapi-linter --spec <specfile> [options]
+  openapi-lint --spec <specfile> [options]
 
 Options:
   --spec <specfile>      Path to OpenAPI specification file (YAML or JSON)
