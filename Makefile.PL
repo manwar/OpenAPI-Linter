@@ -1,3 +1,7 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
@@ -24,8 +28,13 @@ WriteMakefile(
                 version => '0.01'
             },
         },
-        })
+        resources => {
+            repository => {
+                type => 'git',
+                url  => 'https://github.com/manwar/OpenAPI-Linter.git',
+                web  => 'https://github.com/manwar/OpenAPI-Linter',
+            },
+        }})
      : ()
     )
 );
-

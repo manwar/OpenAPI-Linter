@@ -22,7 +22,7 @@ use OpenAPI::Linter;
 
     ok(grep({ $_->{message} =~ /Missing info.description/ } @warnings),
        'Detects missing info.description');
-    ok(grep({ $_->{message} =~ /Missing license/ } @warnings),
+    ok(grep({ $_->{message} =~ /Missing info.license/ } @warnings),
        'Detects missing license');
 }
 
