@@ -1,4 +1,7 @@
 Revision history for OpenAPI::Linter
 
+0.02  2025-11-01
+      - Updated pod documentation.
+
 0.01  2025-11-01
       - Module Created.

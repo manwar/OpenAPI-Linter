@@ -1,6 +1,6 @@
 package OpenAPI::Linter;
 
-$OpenAPI::Linter::VERSION   = '0.01';
+$OpenAPI::Linter::VERSION   = '0.02';
 $OpenAPI::Linter::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ OpenAPI::Linter - Validate and lint OpenAPI specifications
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =head1 SYNOPSIS
 
@@ -107,11 +107,6 @@ sub new {
 
 =head2 find_issues
 
-    my @all_issues = $linter->find_issues;
-    my @issues = $linter->find_issues(level => 'ERROR');
-    my @issues = $linter->find_issues(pattern => qr/missing/i);
-    my @issues = $linter->find_issues(level => 'WARN', pattern => qr/description/);
-
 Finds and returns linting issues in the OpenAPI specification. Returns a list of issue
 hashes in list context, or an array reference in scalar context.
 
@@ -135,6 +130,11 @@ Filter issues by severity level. Either C<ERROR> or C<WARN>.
 Filter issues by message pattern (regular expression).
 
 =back
+
+    my @all_issues = $linter->find_issues;
+    my @issues = $linter->find_issues(level => 'ERROR');
+    my @issues = $linter->find_issues(pattern => qr/missing/i);
+    my @issues = $linter->find_issues(level => 'WARN', pattern => qr/description/);
 
 =cut
 
@@ -285,11 +285,13 @@ The tool can operate in two modes:
 
 =over 4
 
-=item 1. Linting mode (default): Checks for best practices, missing required fields,
-and common issues in OpenAPI specifications.
+=item 1. Linting mode (default)
 
-=item 2. Schema validation mode: Validates the specification against the official
-OpenAPI JSON Schema for the detected version.
+Checks for best practices, missing required fields and common issues in OpenAPI specifications.
+
+=item 2. Schema validation mode
+
+Validates the specification against the official OpenAPI JSON Schema for the detected version.
 
 =back
 
@@ -359,9 +361,9 @@ The default output format displays issues in a readable format:
     [WARN] Missing info.description
     [ERROR] Missing info.version
 
-  Summary: 2 ERRORs, 1 WARN
+    Summary: 2 ERRORs, 1 WARN
 
-Exit codes:
+=head3 Exit Codes
 
 =over 4
 
@@ -443,85 +445,6 @@ official OpenAPI JSON Schema for the detected version. This checks:
 
 =back
 
-=head2 EXIT CODES
-
-=over 4
-
-=item * 0 - Success
-
-No issues found (linting mode) or schema validation passed
-
-=item * 1 - Issues Found
-
-Linting warnings/errors detected or schema validation failed
-
-=item * 2 - Usage Error
-
-Invalid command-line arguments or missing required options
-
-=back
-
-=head1 LINTING CHECKS
-
-OpenAPI::Linter performs the following checks:
-
-=head2 Required Root Elements
-
-=over 4
-
-=item * C<openapi> - OpenAPI version string (ERROR if missing)
-
-=item * C<info> - API metadata object (ERROR if missing)
-
-=item * C<paths> - API paths object (ERROR if missing)
-
-=back
-
-=head2 Info Object Checks
-
-=over 4
-
-=item * C<info.title> - API title (ERROR if missing)
-
-=item * C<info.version> - API version (ERROR if missing)
-
-=item * C<info.description> - API description (WARNING if missing)
-
-=item * C<info.license> - API license information (WARNING if missing)
-
-=back
-
-=head2 Paths and Operations
-
-=over 4
-
-=item * Operation descriptions (WARNING if missing for any operation)
-
-=back
-
-=head2 Components and Schemas
-
-=over 4
-
-=item * Schema type definitions (WARNING if missing)
-
-=item * Property descriptions in schemas (WARNING if missing)
-
-=back
-
-=head1 SUPPORTED OPENAPI VERSIONS
-
-=over 4
-
-=item * OpenAPI 3.0.0, 3.0.1, 3.0.2, 3.0.3
-
-=item * OpenAPI 3.1.0, 3.1.1
-
-=back
-
-The module will automatically detect the version from the C<openapi> field in your
-specification, or you can explicitly set it using the C<version> parameter to the constructor.
-
 =head1 DIAGNOSTICS
 
 =over 4
@@ -534,20 +457,6 @@ the OpenAPI specification.
 =item C<"Unsupported OpenAPI version: %s">
 
 The OpenAPI version specified in the document or provided to the constructor is not supported.
-
-=back
-
-=head1 DEPENDENCIES
-
-=over 4
-
-=item * L<JSON::Validator>
-
-=item * L<JSON>
-
-=item * L<YAML::XS>
-
-=item * L<File::Slurp>
 
 =back
 
