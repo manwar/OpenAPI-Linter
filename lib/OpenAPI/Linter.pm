@@ -1,6 +1,6 @@
 package OpenAPI::Linter;
 
-$OpenAPI::Linter::VERSION   = '0.04';
+$OpenAPI::Linter::VERSION   = '0.05';
 $OpenAPI::Linter::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ OpenAPI::Linter - Validate and lint OpenAPI specifications
 
 =head1 VERSION
 
-Version 0.04
+Version 0.05
 
 =head1 SYNOPSIS
 
@@ -271,9 +271,40 @@ sub validate_schema {
         }
     }
 
+    # Apply the fix before validation
+    _apply_json_validator_fix();
+
     my @errors = $validator->schema($schema_url)->validate($self->{spec});
 
     return wantarray ? @errors : \@errors;
+}
+
+sub _apply_json_validator_fix {
+    return if our $FIX_APPLIED++;
+
+    {
+        package JSON::Validator::Schema;
+        no warnings 'redefine';
+
+        my $orig_validate_format = \&_validate_format;
+
+        *_validate_format = sub {
+            my ($self, $value, $state) = @_;
+            my $format = $state->{schema}{format};
+
+            # Handle URI format validators gracefully - don't warn if missing
+            if ($format && $format =~ /^(uri|uri-reference|uri-template)$/) {
+                my $code = $self->formats->{$format};
+                return unless $code;  # Silently skip if validator missing
+
+                return unless my $err = $code->($value);
+                return E $state->{path}, [format => $format, $err];
+            }
+
+            # Use original validation for other formats
+            return $orig_validate_format->(@_);
+        };
+    }
 }
 
 =head1 APPLICATION

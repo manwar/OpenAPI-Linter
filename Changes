@@ -1,5 +1,8 @@
 Revision history for OpenAPI::Linter
 
+0.05  2025-11-01
+      - Added format check for validator.
+
 0.04  2025-11-01
       - Added checks for spec file.
       - Updated pod.
