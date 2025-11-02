@@ -1,6 +1,6 @@
 package OpenAPI::Linter;
 
-$OpenAPI::Linter::VERSION   = '0.05';
+$OpenAPI::Linter::VERSION   = '0.06';
 $OpenAPI::Linter::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ OpenAPI::Linter - Validate and lint OpenAPI specifications
 
 =head1 VERSION
 
-Version 0.05
+Version 0.06
 
 =head1 SYNOPSIS
 
@@ -274,9 +274,18 @@ sub validate_schema {
     # Apply the fix before validation
     _apply_json_validator_fix();
 
-    my @errors = $validator->schema($schema_url)->validate($self->{spec});
+    my @raw_errors = $validator->schema($schema_url)->validate($self->{spec});
 
-    return wantarray ? @errors : \@errors;
+    # Convert to consistent hashref format matching find_issues
+    my @issues = map {
+        {
+            level   => 'ERROR',
+            message => $_,
+            type    => 'schema_validation'
+        }
+    } @raw_errors;
+
+    return wantarray ? @issues : \@issues;
 }
 
 sub _apply_json_validator_fix {

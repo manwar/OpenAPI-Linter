@@ -1,5 +1,8 @@
 Revision history for OpenAPI::Linter
 
+0.06  2025-11-02
+      - Updated schema_validate() return consistent format data.
+
 0.05  2025-11-01
       - Added format check for validator.
 
