@@ -1,6 +1,6 @@
 package OpenAPI::Linter;
 
-$OpenAPI::Linter::VERSION   = '0.06';
+$OpenAPI::Linter::VERSION   = '0.07';
 $OpenAPI::Linter::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ OpenAPI::Linter - Validate and lint OpenAPI specifications
 
 =head1 VERSION
 
-Version 0.06
+Version 0.07
 
 =head1 SYNOPSIS
 
@@ -278,9 +278,33 @@ sub validate_schema {
 
     # Convert to consistent hashref format matching find_issues
     my @issues = map {
+        my $message;
+
+        if (ref $_) {
+            # Try different methods to extract the error message
+            if ($_->can('to_string')) {
+                $message = $_->to_string;
+            } elsif (exists $_->{message}) {
+                $message = $_->{message};
+            } elsif ($_->can('message')) {
+                $message = $_->message;
+            } else {
+                $message = "$_";
+            }
+
+            # Include path if available
+            if ($_->can('path') && $_->path) {
+                $message = $_->path . ": $message";
+            } elsif (exists $_->{path} && $_->{path}) {
+                $message = $_->{path} . ": $message";
+            }
+        } else {
+            $message = $_;
+        }
+
         {
             level   => 'ERROR',
-            message => $_,
+            message => $message,
             type    => 'schema_validation'
         }
     } @raw_errors;
