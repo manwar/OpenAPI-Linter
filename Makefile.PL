@@ -25,7 +25,7 @@ WriteMakefile(
         provides    => {
             'OpenAPI::Linter' => {
                 file    => 'lib/OpenAPI/Linter.pm',
-                version => '0.07'
+                version => '0.08'
             },
         },
         resources => {

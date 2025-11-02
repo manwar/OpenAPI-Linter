@@ -1,6 +1,6 @@
 package OpenAPI::Linter;
 
-$OpenAPI::Linter::VERSION   = '0.07';
+$OpenAPI::Linter::VERSION   = '0.08';
 $OpenAPI::Linter::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ OpenAPI::Linter - Validate and lint OpenAPI specifications
 
 =head1 VERSION
 
-Version 0.07
+Version 0.08
 
 =head1 SYNOPSIS
 
@@ -106,9 +106,9 @@ sub new {
     }, $class;
 }
 
-=head2 find_issues
+=head2 find_issues()
 
-Finds and returns linting issues in the OpenAPI specification. Returns a list of issue
+Finds and returns linting issues in the C<OpenAPI> specification. Returns a list of issue
 hashes in list context, or an array reference in scalar context.
 
 Each issue hash contains:
@@ -176,8 +176,8 @@ sub find_issues {
 
     # Paths / operations
     if ($spec->{paths}) {
-        for my $path (keys %{$spec->{paths}}) {
-            for my $method (keys %{$spec->{paths}{$path}}) {
+        for my $path (sort keys %{$spec->{paths}}) {
+            for my $method (sort keys %{$spec->{paths}{$path}}) {
                 my $op = $spec->{paths}{$path}{$method};
                 push @issues, {
                     level   => 'WARN',
@@ -189,7 +189,7 @@ sub find_issues {
 
     # Components / schemas
     if ($spec->{components} && $spec->{components}{schemas}) {
-        for my $name (keys %{$spec->{components}{schemas}}) {
+        for my $name (sort keys %{$spec->{components}{schemas}}) {
             my $schema = $spec->{components}{schemas}{$name};
             push @issues, {
                 level   => 'WARN',
@@ -197,7 +197,7 @@ sub find_issues {
             } unless $schema->{type};
 
             if ($schema->{properties}) {
-                for my $prop (keys %{$schema->{properties}}) {
+                for my $prop (sort keys %{$schema->{properties}}) {
                     push @issues, {
                         level   => 'WARN',
                         message => "Schema $name.$prop missing description"

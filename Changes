@@ -1,5 +1,8 @@
 Revision history for OpenAPI::Linter
 
+0.08  2025-11-02
+      - Updated find_issues() return ordered keys.
+
 0.07  2025-11-02
       - Updated validate_schema() to extract message correctly.
 
