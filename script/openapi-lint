@@ -54,7 +54,16 @@ if ($json_output) {
 } else {
     if (@issues) {
         for my $i (@issues) {
-            printf "[%s] %s\n", $i->{level}, $i->{message};
+            my $message = $i->{message};
+
+            # Apply formatting only to schema validation errors
+            if ($validate_schema) {
+                $message = $linter->format_schema_error($message);
+                print "$message\n";
+            }
+            else {
+                printf "[%s] %s\n", $i->{level}, $message;
+            }
         }
         printf "\nSummary: %d ERROR%s, %d WARN%s\n",
             $errors, $errors == 1 ? '' : 's',

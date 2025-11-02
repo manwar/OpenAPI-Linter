@@ -1,6 +1,6 @@
 package OpenAPI::Linter;
 
-$OpenAPI::Linter::VERSION   = '0.08';
+$OpenAPI::Linter::VERSION   = '0.09';
 $OpenAPI::Linter::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ OpenAPI::Linter - Validate and lint OpenAPI specifications
 
 =head1 VERSION
 
-Version 0.08
+Version 0.09
 
 =head1 SYNOPSIS
 
@@ -310,6 +310,24 @@ sub validate_schema {
     } @raw_errors;
 
     return wantarray ? @issues : \@issues;
+}
+
+sub format_schema_error {
+    my ($self, $message) = @_;
+
+    # Remove duplicate path prefixes
+    $message =~ s{^(/.+?):\s+\1:}{$1:};
+
+    # Clean up encoded paths for readability
+    $message =~ s{/~001}{/}g;
+    $message =~ s{/~1}{/}g;
+
+    # If still long, wrap after the first colon
+    if (length($message) > 80) {
+        $message =~ s/:\s+/:\n      /;
+    }
+
+    return "  - $message";
 }
 
 sub _apply_json_validator_fix {
