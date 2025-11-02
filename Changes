@@ -1,5 +1,8 @@
 Revision history for OpenAPI::Linter
 
+0.10  2025-11-02
+      - Renamed script: openapi-linter.
+
 0.09  2025-11-02
       - Added method format_schema_error().
       - Updated script openapi-lint to use the above method.

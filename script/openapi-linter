@@ -13,11 +13,11 @@ my $validate_schema = 0;
 my $help            = 0;
 
 GetOptions(
-    'json'       => \$json_output,
-    'version=s'  => \$version,
-    'spec=s'     => \$spec,
-    'validate'   => \$validate_schema,
-    'help'       => \$help,
+    'json'      => \$json_output,
+    'version=s' => \$version,
+    'spec=s'    => \$spec,
+    'validate'  => \$validate_schema,
+    'help'      => \$help,
 ) or print_usage(2);
 
 print_usage(0) if $help;
@@ -83,14 +83,14 @@ sub print_usage {
     my ($exit_code) = @_;
     print <<'USAGE';
 Usage:
-  openapi-lint --spec <specfile> [options]
+  openapi-linter --spec <specfile> [options]
 
 Options:
-  --spec <specfile>      Path to OpenAPI specification file (YAML or JSON)
-  --version <version>    Specify OpenAPI version (e.g., 3.0.3, 3.1.0)
-  --json                 Output results in JSON format
-  --validate             Run schema validation instead of lint checks
-  --help                 Show this help message and exit
+  --spec <specfile>    Path to OpenAPI specification file (YAML or JSON)
+  --version <version>  Specify OpenAPI version (e.g., 3.0.3, 3.1.0)
+  --json               Output results in JSON format
+  --validate           Run schema validation instead of lint checks
+  --help               Show this help message and exit
 
 Examples:
   openapi-linter --spec api.yaml

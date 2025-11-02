@@ -1,6 +1,6 @@
 package OpenAPI::Linter;
 
-$OpenAPI::Linter::VERSION   = '0.09';
+$OpenAPI::Linter::VERSION   = '0.10';
 $OpenAPI::Linter::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ OpenAPI::Linter - Validate and lint OpenAPI specifications
 
 =head1 VERSION
 
-Version 0.09
+Version 0.10
 
 =head1 SYNOPSIS
 
@@ -360,7 +360,7 @@ sub _apply_json_validator_fix {
 
 =head1 APPLICATION
 
-C<openapi-lint> is a command-line tool that validates C<OpenAPI> specifications
+C<openapi-linter> is a command-line tool that validates C<OpenAPI> specifications
 for both structural correctness and best practices. It uses the L<OpenAPI::Linter>
 module to perform comprehensive checks on C<OpenAPI> documents.
 
@@ -412,25 +412,25 @@ Display this help message and exit.
 
 =head3 Basic Usage
 
-    openapi-lint --spec api.yaml
+    openapi-linter --spec api.yaml
 
 Run linting checks on C<api.yaml> and display results in human-readable format.
 
 =head3 Schema Validation
 
-    openapi-lint --spec api.json --validate
+    openapi-linter --spec api.json --validate
 
 Validate C<api.json> against the official OpenAPI JSON Schema.
 
 =head3 JSON Output
 
-    openapi-lint --spec api.yaml --json
+    openapi-linter --spec api.yaml --json
 
 Run linting checks and output results in JSON format for programmatic processing.
 
 =head3 Specific Version
 
-    openapi-lint --spec api.yaml --version 3.1.0
+    openapi-linter --spec api.yaml --version 3.1.0
 
 Run linting checks assuming OpenAPI version 3.1.0, overriding auto-detection.
 

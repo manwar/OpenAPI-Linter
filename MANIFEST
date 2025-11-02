@@ -5,7 +5,7 @@ Makefile.PL
 MANIFEST
 MANIFEST.SKIP
 README
-script/openapi-lint
+script/openapi-linter
 t/00_load.t
 t/01_basic.t
 t/02_lint_errors.t

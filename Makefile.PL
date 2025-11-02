@@ -10,7 +10,7 @@ WriteMakefile(
     ABSTRACT     => 'Lint and validate OpenAPI specification files',
     AUTHOR       => 'Mohammad Sajid Anwar <mohammad.anwar@yahoo.com>',
     LICENSE      => 'artistic_2',
-    EXE_FILES    => ['script/openapi-lint'],
+    EXE_FILES    => ['script/openapi-linter'],
     PREREQ_PM    => {
         'JSON::Validator' => 0,
         'YAML::XS'        => 0,
@@ -25,7 +25,7 @@ WriteMakefile(
         provides    => {
             'OpenAPI::Linter' => {
                 file    => 'lib/OpenAPI/Linter.pm',
-                version => '0.09'
+                version => '0.10'
             },
         },
         resources => {
