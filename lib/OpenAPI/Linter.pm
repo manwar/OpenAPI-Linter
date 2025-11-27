@@ -331,32 +331,99 @@ Validates the C<OpenAPI> specification against the official C<JSON> Schema for t
 C<OpenAPI> version. Returns a list of validation errors in list context or an array
 reference in scalar context.
 
-This method uses L<JSON::Validator> to perform schema validation and applies corrections
-for known bugs in the official OpenAPI JSON Schema definitions.
+This method uses L<JSON::Validator> to perform schema validation. It applies filtering
+to address validation discrepancies where valid OpenAPI specifications (per the OpenAPI
+Specification text) are incorrectly flagged as invalid.
 
-=head3 Known Schema Issues
+=head3 Validation Discrepancies
 
-The official OpenAPI JSON Schema has several documented bugs that cause false positive errors:
+When validating against the published schemas, L<JSON::Validator> produces errors for
+constructs that are explicitly valid according to the OpenAPI Specification v3.0.3.
+
+B<Example:> This valid parameter definition:
+
+    parameters:
+      - name: id
+        in: path        # Valid per OpenAPI Spec
+        required: true  # Valid boolean per OpenAPI Spec
+        schema:
+          type: string
+
+Produces these validation errors:
+
+    /in: Not in enum list: query, header, cookie
+    /required: Not in enum list: true
+    /$ref: Missing property
+
+B<The OpenAPI Specification states:>
+
+"C<in> (string, REQUIRED): The location of the parameter. Possible values are
+C<query>, C<header>, C<path> or C<cookie>."
+
+Reference: L<https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#parameter-object>
+
+Despite C<path> being explicitly listed as valid, validation fails.
+
+=head3 Filtering Approach
+
+To ensure valid OpenAPI specifications validate correctly, this method filters errors by:
 
 =over 4
 
-=item * B<Missing 'path' in Parameter 'in' enum>
+=item 1. Identifying error patterns matching known discrepancies
 
-Bug: The schema's enum for parameter 'in' property omits 'path', though it's required by spec.
-Reference: L<https://spec.openapis.org/oas/v3.0.3#parameter-object>
+=item 2. Extracting the actual value from the specification
 
-=item * B<Incorrect boolean handling for 'required'>
+=item 3. Checking if the value is valid per the OpenAPI Specification text
 
-Bug: The schema sometimes validates 'required' as enum instead of boolean type.
-
-=item * B<Overly strict $ref requirements>
-
-Bug: The schema incorrectly requires $ref for fully-defined inline parameters.
+=item 4. Removing the error only if the value is explicitly documented as valid
 
 =back
 
-These are bugs in the published schema, not in valid OpenAPI specs. We filter these specific
-false positives while preserving all legitimate validation errors.
+B<Important:> Invalid values still generate errors. For example, C<in: invalid_location>
+will correctly produce a validation error.
+
+=head3 Filtered Patterns
+
+=over 4
+
+=item * B<Parameter 'in' field>
+
+Error pattern: C</in: Not in enum list>
+
+Filtered when: actual value is C<'path'> (valid per L<https://spec.openapis.org/oas/v3.0.3.html#fixed-fields-9>)
+
+=item * B<Parameter 'required' field>
+
+Error pattern: C</required: Not in enum list>
+
+Filtered when: actual value is a boolean (true, false, 1, 0)
+
+=item * B<Inline parameter definitions>
+
+Error pattern: C</$ref: Missing property>
+
+Filtered when: parameter has both C<name> and C<in> fields (valid inline definition)
+
+=back
+
+=head3 Root Cause
+
+The exact cause of these discrepancies is unclear and could involve:
+
+=over 4
+
+=item * Issues in the published JSON Schema files
+
+=item * L<JSON::Validator>'s interpretation of those schemas
+
+=item * Interactions between validator and schema
+
+=back
+
+This method takes a pragmatic approach: it defers to the authoritative OpenAPI
+Specification text when determining validity, ensuring users get accurate validation
+results for their specifications.
 
 =cut
 
