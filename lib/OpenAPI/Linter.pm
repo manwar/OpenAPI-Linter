@@ -1,6 +1,6 @@
 package OpenAPI::Linter;
 
-$OpenAPI::Linter::VERSION   = '0.14';
+$OpenAPI::Linter::VERSION   = '0.15';
 $OpenAPI::Linter::AUTHORITY = 'cpan:MANWAR';
 
 =head1 NAME
@@ -9,7 +9,7 @@ OpenAPI::Linter - Validate and lint OpenAPI specifications
 
 =head1 VERSION
 
-Version 0.14
+Version 0.15
 
 =head1 SYNOPSIS
 
@@ -502,8 +502,8 @@ sub validate_schema {
         @raw_errors = ();
     }
 
-    # Filter known false positives caused by bugs in the official OpenAPI schema
-    @raw_errors = $self->_filter_schema_bugs(@raw_errors);
+    # Filter known false positives
+    @raw_errors = $self->_filter_known_false_positives(@raw_errors);
 
     # Convert to consistent hashref format with location information
     my @issues = map {
@@ -553,17 +553,15 @@ sub validate_schema {
     return wantarray ? @issues : \@issues;
 }
 
-=head2 _filter_schema_bugs
+=head2 _filter_known_false_positives
 
-    @filtered = $self->_filter_schema_bugs(@errors);
+    @filtered = $self->_filter_known_false_positives(@errors);
 
-Internal method that filters out false positive errors caused by known bugs in the official
-OpenAPI JSON Schema definitions. This method validates that errors are truly false positives
-by checking the actual spec values before filtering.
+Internal method that filters out false positive errors. This method validates that
+errors are truly false positives by checking the actual spec values before filtering.
 
-This is a targeted approach that only removes errors when:
-1. The error matches a known schema bug pattern AND
-2. The actual value in the spec is valid per the OpenAPI specification
+This is a targeted approach that only removes errors when the actual value in the
+spec is valid per the OpenAPI specification
 
 All other errors, including similar-looking errors with invalid values, are preserved.
 
@@ -573,7 +571,7 @@ and check the actual value of that field.
 
 =cut
 
-sub _filter_schema_bugs {
+sub _filter_known_false_positives {
     my ($self, @errors) = @_;
     my $spec = $self->{spec};
 
