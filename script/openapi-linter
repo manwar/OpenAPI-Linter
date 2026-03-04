@@ -2,9 +2,12 @@
 
 use strict;
 use warnings;
+
 use JSON;
 use Getopt::Long;
 use OpenAPI::Linter;
+
+our $VERSION = '0.17';
 
 my $spec;
 my $version;
@@ -62,6 +65,12 @@ if ($json_output) {
             }
             else {
                 printf "[%s] %s\n", $i->{level}, $message;
+            }
+
+            # Print remediation hint if present, indented for readability
+            if ($i->{hint}) {
+                (my $hint = $i->{hint}) =~ s/^/    /mg;
+                print "$hint\n";
             }
         }
         printf "\nSummary: %d ERROR%s, %d WARN%s\n",
