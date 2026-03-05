@@ -1,5 +1,9 @@
 Revision history for OpenAPI::Linter
 
+0.18  2026-03-05
+      [ENHANCEMENTS]
+      - Added pod to the openapi-linter script to get it indexed by CPAN.
+
 0.17  2026-03-04
       [ENHANCEMENTS]
       - Bundled OpenAPI meta-schemas (3.0.x and 3.1.x) under share/ to
