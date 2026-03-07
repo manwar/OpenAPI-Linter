@@ -1,6 +1,6 @@
 package OpenAPI::Linter;
 
-$OpenAPI::Linter::VERSION          = '0.18';
+$OpenAPI::Linter::VERSION          = '0.19';
 $OpenAPI::Linter::Async::AUTHORITY = 'cpan:MANWAR';
 
 use strict;
@@ -22,7 +22,7 @@ OpenAPI::Linter - Validate and lint OpenAPI 3.x specification files
 
 =head1 VERSION
 
-Version 0.18
+Version 0.19
 
 =head1 SYNOPSIS
 

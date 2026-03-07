@@ -1,5 +1,9 @@
 Revision history for OpenAPI::Linter
 
+0.19 2026-03-07
+     [IMPROVEMENTS]
+     - Added GitHub issues to Makefile.PL script.
+
 0.18  2026-03-05
       [ENHANCEMENTS]
       - Added pod to the openapi-linter script to get it indexed by CPAN.

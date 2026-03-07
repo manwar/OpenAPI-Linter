@@ -1,6 +1,6 @@
 package OpenAPI::Linter::Location;
 
-$OpenAPI::Linter::Location::VERSION   = '0.18';
+$OpenAPI::Linter::Location::VERSION   = '0.19';
 $OpenAPI::Linter::Location::AUTHORITY = 'cpan:MANWAR';
 
 use strict;
@@ -15,7 +15,7 @@ OpenAPI::Linter::Location - File location information for OpenAPI spec issues
 
 =head1 VERSION
 
-Version 0.18
+Version 0.19
 
 =head1 SYNOPSIS
 
